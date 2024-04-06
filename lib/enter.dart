@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'dart:convert';
 import 'registration.dart';
+import 'pageMain.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -18,17 +19,24 @@ class _MyHomePageState extends State<MyHomePage> {
   
 
   Future<bool> authenticateUser(String email, String password) async {
-    final authData = await pb.admins.authWithPassword('admin@itmo.ru', 'qbOVftQaH_DSBSVpa5ISPfUYF3Ut9VRQ');
-    final record = await pb.collection('user').getOne('yaq5v6q44zuxi0r');
-    print(record);
-    return(true);
-  }
+    await pb.collection("users").authWithPassword(email, password);
+    return pb.authStore.isValid;
+}
 
 
   void _navigateToRegistrationPage(BuildContext context) {
     Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => YourRegistrationPage()),
+    );
+  }
+
+
+    @override 
+    void _navigateToMainPage(BuildContext context) {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => MainPage()),
     );
   }
 
@@ -48,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, // Исправлено на стандартный цвет
+                  color: Colors.white, 
                 ),
               ),
               Padding(
@@ -84,20 +92,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  bool isAuthenticated = await authenticateUser(
-                    _emailController.text,
-                    _passwordController.text,
-                  );
-                  if (isAuthenticated) {
-                    print('Успешная аутентификация');
-                  } else {
-                    print('Неверный логин или пароль');
-                  }
-                },
-                   style: ElevatedButton.styleFrom(
-                     minimumSize: const Size(150, 50), 
-                ),
+              onPressed: () async {
+                bool isAuthenticated = await authenticateUser(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                if (isAuthenticated) {
+                  
+                  _navigateToMainPage(context);
+
+                } else {
+                  print('Неверный логин или пароль');
+                }
+              },
                 child: const Text('Войти',
                 style: TextStyle(
                   fontSize: 20, 

@@ -1,7 +1,9 @@
 import 'package:cookapp/enter.dart';
+import 'package:cookapp/pageMain.dart';
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'dart:convert';
+import 'pageMain.dart';
 
 
 class YourRegistrationPage extends StatefulWidget {
@@ -12,13 +14,36 @@ class YourRegistrationPage extends StatefulWidget {
 }
 
 class _YourRegistrationPageState extends State<YourRegistrationPage> {
-  @override
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final pb = PocketBase('http://45.135.164.29:8080');
 
-    void _navigateToRegistrationPage(BuildContext context) {
+  @override void _navigateToRegistrationPage(BuildContext context) {
     Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => MyHomePage()),
     );
+  }
+
+  @override 
+  void _navigateToMainPage(BuildContext context) {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => MainPage()),
+    );
+  }
+
+
+  Future<bool> register(String email, String password) async {
+    final Map<String, String> user = {"email": email, "password": password, "passwordConfirm": password};
+    try {
+      await pb.collection("users").create(body: user);
+      await pb.collection("users").authWithPassword(email, password);
+      return pb.authStore.isValid;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   Widget build(BuildContext context) {
@@ -36,29 +61,13 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, // Исправлено на стандартный цвет
+                  color: Colors.white, 
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 20, 30, 5),
                 child: TextField(
-                  //controller: _emailController,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    hintText: 'Имя',
-                    fillColor: Colors.white, 
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 20, 30, 5),
-                child: TextField(
-                  //controller: _emailController,
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'Email',
@@ -74,7 +83,7 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
                 child: TextField(
-                  //controller: _passwordController,
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Пароль',
@@ -104,7 +113,11 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  final isOk = await register(_emailController.text, _passwordController.text);
+                  if (isOk) {
+                    _navigateToMainPage(context);
+                  } else { print("not registered"); }
                 },
                   style: ElevatedButton.styleFrom(
                      minimumSize: const Size(150, 50), 
