@@ -1,4 +1,4 @@
-# cookapp
+# cookHub
 
 A new Flutter project.
 
