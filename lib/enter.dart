@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'dart:convert';
+//import 'dart:convert';
 import 'registration.dart';
-import 'pageMain.dart';
+import 'mainPage.dart';
+import 'service/PocketbaseService.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final pb = PocketBase('http://45.135.164.29:8080');
+  final pb = PocketBaseService.pb;
 
   
 
@@ -32,7 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
-    @override 
     void _navigateToMainPage(BuildContext context) {
     Navigator.push(
     context,
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset("assets/png/chef.png", width: 220, height: 170),
+              Image.asset("assets/png/cooking.png", width: 220, height: 170),
               const SizedBox(height: 22),
               const Text(
                 "Добро пожаловать в \n Cook HUB!",

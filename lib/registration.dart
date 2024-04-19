@@ -1,9 +1,10 @@
-import 'package:cookapp/enter.dart';
-import 'package:cookapp/pageMain.dart';
+import 'package:cook/enter.dart';
+import 'package:cook/mainPage.dart';
+import 'package:cook/service/PocketbaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'dart:convert';
-import 'pageMain.dart';
+//import 'dart:convert';
+//import 'pageMain.dart';
 
 
 class YourRegistrationPage extends StatefulWidget {
@@ -16,16 +17,15 @@ class YourRegistrationPage extends StatefulWidget {
 class _YourRegistrationPageState extends State<YourRegistrationPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final pb = PocketBase('http://45.135.164.29:8080');
+  final pb = PocketBaseService.pb;
 
-  @override void _navigateToRegistrationPage(BuildContext context) {
+  void _navigateToRegistrationPage(BuildContext context) {
     Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => MyHomePage()),
     );
   }
 
-  @override 
   void _navigateToMainPage(BuildContext context) {
     Navigator.push(
     context,

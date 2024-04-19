@@ -1,8 +1,8 @@
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pocketbase/pocketbase.dart';
-import 'dart:convert';
-import 'registration.dart';
+//import 'package:pocketbase/pocketbase.dart';
+//import 'dart:convert';
+//import 'registration.dart';
 import 'enter.dart';
 //import 'package:http/http.dart' as http;
 
