@@ -19,21 +19,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<bool> authenticateUser(String email, String password) async {
     await pb.collection("users").authWithPassword(email, password);
     return pb.authStore.isValid;
-}
+  }
 
 
   void _navigateToRegistrationPage(BuildContext context) {
     Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => YourRegistrationPage()),
+      context,
+      MaterialPageRoute(builder: (context) => YourRegistrationPage()),
     );
   }
 
 
     void _navigateToMainPage(BuildContext context) {
     Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => MainPage()),
+      context,
+      MaterialPageRoute(builder: (context) => MainPage()),
     );
   }
 
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, 
+                  color: Colors.white,
                 ),
               ),
               Padding(
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'Email',
-                    fillColor: Colors.white, 
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Пароль',
-                    fillColor: Colors.white, 
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -89,24 +89,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               ElevatedButton(
-              onPressed: () async {
-                bool isAuthenticated = await authenticateUser(
-                  _emailController.text,
-                  _passwordController.text,
-                );
-                if (isAuthenticated) {
-                  
+                onPressed: () async {
+                  bool isAuthenticated = await authenticateUser(
+                    _emailController.text,
+                    _passwordController.text,
+                  );
+                  if (isAuthenticated) {
+                  _navigateToMainPage(context);
                   _navigateToMainPage(context);
 
-                } else {
-                  print('Неверный логин или пароль');
-                }
-              },
+                    _navigateToMainPage(context);
+
+                  } else {
+                    print('Неверный логин или пароль');
+                  }
+                },
                 child: const Text('Войти',
-                style: TextStyle(
-                  fontSize: 20, 
-                  fontWeight: FontWeight.bold,
-                  color:   Color.fromARGB(255, 148, 205, 120))),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 148, 205, 120))),
               ),
               const SizedBox(height: 15),
               const Text(
@@ -130,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Color.fromARGB(221, 255, 255, 255),
                     decoration: TextDecoration.underline,
                     decorationColor: Colors.white,
-                         ),
+                  ),
                 ),
               ),
             ],
