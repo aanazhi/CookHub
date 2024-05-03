@@ -1,8 +1,6 @@
 import 'service/PocketbaseService.dart';
-import 'settingsScreen.dart';
+import 'package:cook/settings_screen.dart';
 import 'package:flutter/material.dart';
-
-
 
 
 class RecipeModel {
