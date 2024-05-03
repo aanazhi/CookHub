@@ -1,6 +1,6 @@
 import 'package:cook/search.dart';
 import 'package:cook/recipes_list.dart';
-import 'package:pocketbase/pocketbase.dart';
+import 'package:cook/add_recipe.dart';
 import 'service/PocketbaseService.dart';
 import 'package:cook/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +52,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final _searchPage = SearchPage();
   final _recipesListPage = RecipesListPage(recipes: getRecipes());
+  final _addRecipePage = AddRecipePage();
   int _selectedIndex = 0;
   final pb = PocketBaseService.pb;
 
@@ -212,7 +213,7 @@ class _MainPageState extends State<MainPage> {
       ),
       backgroundColor: Colors.white,
       body: Center(
-        child: _selectedIndex == 0 ? _buildMainPage() : _selectedIndex == 1 ? _searchPage  : _selectedIndex ==  4 ?  _recipesListPage : Container(), 
+        child: _selectedIndex == 0 ? _buildMainPage() : _selectedIndex == 1 ? _searchPage : _selectedIndex == 2 ? _addRecipePage : _selectedIndex ==  4 ?  _recipesListPage : Container(), 
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
