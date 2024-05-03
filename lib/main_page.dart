@@ -1,14 +1,6 @@
-//import 'package:cookapp/enter.dart';
-import 'dart:convert';
-
-import 'package:cook/enter.dart';
-import 'package:cook/service/PocketbaseService.dart';
-import 'package:cook/settingsScreen.dart';
+import 'service/PocketbaseService.dart';
+import 'package:cook/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:pocketbase/pocketbase.dart';
-//import 'dart:convert';
-
-
 
 
 class RecipeModel {
@@ -52,7 +44,7 @@ class _MainPageState extends State<MainPage> {
   }
   static const colorNew = Color.fromARGB(255, 148, 205, 120);
 
-final pb = PocketBaseService.pb;
+  final pb = PocketBaseService.pb;
 
   Future<String> getName() async {
     print(pb.authStore.model);
@@ -67,20 +59,20 @@ final pb = PocketBaseService.pb;
   }
 
  Future<List<RecipeModel>> getReceipes() async {
-  final records = await pb.collection('recipes').getFullList(
-    sort: '-created',
-  );
-  List<RecipeModel> recipes = [];
+    final records = await pb.collection('recipes').getFullList(
+      sort: '-created',
+    );
+    List<RecipeModel> recipes = [];
 
-  for(int i = 0; i < records.length; ++i) {
-      recipes.add(RecipeModel.fromJson(records[i].toJson()));
+    for(int i = 0; i < records.length; ++i) {
+        recipes.add(RecipeModel.fromJson(records[i].toJson()));
+    }
+    //   List<RecipeModel> recipes = records.map<RecipeModel>((record) {
+    //   return RecipeModel.fromJson(record as Map<String, dynamic>);
+    // }).toList();
+
+    return recipes;
   }
-  //   List<RecipeModel> recipes = records.map<RecipeModel>((record) {
-  //   return RecipeModel.fromJson(record as Map<String, dynamic>);
-  // }).toList();
-
-  return recipes;
-}
 
 
 
