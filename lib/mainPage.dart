@@ -1,12 +1,6 @@
-//import 'package:cookapp/enter.dart';
-import 'dart:convert';
-
-import 'package:cook/enter.dart';
-import 'package:cook/service/PocketbaseService.dart';
-import 'package:cook/settingsScreen.dart';
+import 'service/PocketbaseService.dart';
+import 'settingsScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:pocketbase/pocketbase.dart';
-//import 'dart:convert';
 
 
 

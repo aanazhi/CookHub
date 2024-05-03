@@ -2,9 +2,6 @@ import 'package:cook/enter.dart';
 import 'package:cook/mainPage.dart';
 import 'package:cook/service/PocketbaseService.dart';
 import 'package:flutter/material.dart';
-import 'package:pocketbase/pocketbase.dart';
-//import 'dart:convert';
-//import 'pageMain.dart';
 
 
 class YourRegistrationPage extends StatefulWidget {

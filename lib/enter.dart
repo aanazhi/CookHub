@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocketbase/pocketbase.dart';
-//import 'dart:convert';
-import 'registration.dart';
-import 'mainPage.dart';
-import 'service/PocketbaseService.dart';
+import 'package:cook/registration.dart';
+import 'package:cook/mainPage.dart';
+import 'package:cook/service/PocketbaseService.dart';
 
 
 class MyHomePage extends StatefulWidget {
