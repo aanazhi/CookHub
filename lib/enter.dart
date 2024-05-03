@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cook/registration.dart';
-import 'package:cook/mainPage.dart';
+import 'package:cook/main_page.dart';
 import 'package:cook/service/PocketbaseService.dart';
-
 
 class MyHomePage extends StatefulWidget {
   @override
