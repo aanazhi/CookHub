@@ -1,3 +1,6 @@
+import 'package:cook/search.dart';
+import 'package:cook/recipes_list.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'service/PocketbaseService.dart';
 import 'package:cook/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,18 @@ class RecipeModel {
   }
 }
 
+Future<List<RecipeModel>> getRecipes() async {
+  final records = await PocketBaseService.pb.collection('recipes').getFullList(
+    sort: '-created',
+  );
+  List<RecipeModel> recipes = [];
+  for(int i = 0; i < records.length; ++i) {
+      recipes.add(RecipeModel.fromJson(records[i].toJson()));
+  }
+  return recipes;
+}
+  
+
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -35,7 +50,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final _searchPage = SearchPage();
+  final _recipesListPage = RecipesListPage(recipes: getRecipes());
   int _selectedIndex = 0;
+  final pb = PocketBaseService.pb;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,7 +62,6 @@ class _MainPageState extends State<MainPage> {
   }
   static const colorNew = Color.fromARGB(255, 148, 205, 120);
 
-  final pb = PocketBaseService.pb;
 
   Future<String> getName() async {
     print(pb.authStore.model);
@@ -58,26 +75,6 @@ class _MainPageState extends State<MainPage> {
     return name;
   }
 
- Future<List<RecipeModel>> getReceipes() async {
-    final records = await pb.collection('recipes').getFullList(
-      sort: '-created',
-    );
-    List<RecipeModel> recipes = [];
-
-    for(int i = 0; i < records.length; ++i) {
-        recipes.add(RecipeModel.fromJson(records[i].toJson()));
-    }
-    //   List<RecipeModel> recipes = records.map<RecipeModel>((record) {
-    //   return RecipeModel.fromJson(record as Map<String, dynamic>);
-    // }).toList();
-
-    return recipes;
-  }
-
-
-
-
-  
   Future<String> getAbout() async {
     print(pb.authStore.model);
     final record =  await pb.collection('users').getOne(pb.authStore.model.id);
@@ -89,10 +86,6 @@ class _MainPageState extends State<MainPage> {
     final about = record.getDataValue<String>('about');  
     return about;
   }
-
-  
-
-
   
   Widget _buildMainPage() {
     return SingleChildScrollView(
@@ -195,76 +188,6 @@ class _MainPageState extends State<MainPage> {
     );
   }
   
-Widget _buildReceipePage() {
-  return Scaffold(
-    backgroundColor: Colors.white,
-    body: FutureBuilder<List>(
-      future: getReceipes(), 
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          print(snapshot.error);
-          return const Center(child: Text('Произошла ошибка'));
-        } else if (snapshot.hasData) {
-          return ListView.separated(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final recipe = snapshot.data![index];
-              return ListTile(
-                leading: Image.network(
-                  recipe.photo,
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(child: CircularProgressIndicator());
-                  },
-                  errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
-                ),
-                 title: Text(
-                recipe.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 15, 
-                ),
-              ),
-              subtitle: Text(
-                 ' Время приготовления: ${recipe.time.toString()} минут \n'
-                 '\n'
-                 '${recipe.calorie} ккал на 100 грамм'
-                 ,
-                 style: const TextStyle(
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 13, 
-                  color: Colors.black,
-                ),
-              ),
-                onTap: () {
-                  // Действие при нажатии на элемент списка
-                },
-              );
-            },
-            separatorBuilder: (context, index) => Column(
-              children: [
-                SizedBox(height: 20),
-                Container(
-                  height: 2,
-                  color: Colors.green,
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
-          );
-        } else {
-          return Center(child: Text('Нет данных'));
-        }
-      },
-    ),
-  );
-}
-
 
 
   @override
@@ -289,11 +212,7 @@ Widget _buildReceipePage() {
       ),
       backgroundColor: Colors.white,
       body: Center(
-        child: _selectedIndex == 0 
-    ? _buildMainPage() 
-    : _selectedIndex ==  4
-      ?  _buildReceipePage()
-      : Container(), 
+        child: _selectedIndex == 0 ? _buildMainPage() : _selectedIndex == 1 ? _searchPage  : _selectedIndex ==  4 ?  _recipesListPage : Container(), 
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
