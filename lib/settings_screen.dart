@@ -69,6 +69,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
 
+  Future<void> updateUserName(String newName) async {
+    try {
+      final body = <String, dynamic>{
+        "name": newName, 
+      };
+
+      final record = await pb.collection('users').update(pb.authStore.model.id, body: body);
+      print("User name updated successfully: $record");
+    } catch (e) {
+      print("Failed to update user name: $e");
+    }
+  }
+
+
+  Future<void> updateAbout(String newAbout) async {
+    try {
+      final body = <String, dynamic>{
+        "about": newAbout, 
+      };
+
+      final record = await pb.collection('users').update(pb.authStore.model.id, body: body);
+      print("User name updated successfully: $record");
+    } catch (e) {
+      print("Failed to update user name: $e");
+    }
+  }
+
+
+  
+  Future<void> updatePassword(String password) async {
+    try {
+      final body = <String, dynamic>{
+        "about": password, 
+      };
+
+      final record = await pb.collection('users').update(pb.authStore.model.id, body: body);
+      print("User name updated successfully: $record");
+    } catch (e) {
+      print("Failed to update user name: $e");
+    }
+  }
+
+
 
 
   Future<String> getAbout() async {
@@ -102,6 +145,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final email = record.getDataValue<String>('email');  
     return email;
   }
+
+  
 
 
 
@@ -204,7 +249,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                  _navigateToRegistrationPage(context);
+                    updateUserName(_nameController.text);
+                    updateAbout(_aboutController.text);
+                    updatePassword(_passwordController.text);
                   },
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(30, 20, 30, 5),

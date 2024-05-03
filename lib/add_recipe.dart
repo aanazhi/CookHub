@@ -37,61 +37,59 @@ class _AddRecipePageState extends State<AddRecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: TextFieldDecoration("Название"),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _descriptionController,
-              decoration: TextFieldDecoration("Описание"),
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _instructionsController,
-              decoration: TextFieldDecoration("Рецепт"),
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _timeController,
-              decoration: TextFieldDecoration("Время приготовления (минут)"),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _calorieController,
-              decoration: TextFieldDecoration("Калорийность"),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 10),
-            SwitchListTile(
-              value: isVegan,
-              onChanged: (val) => {setState(() {
-                isVegan = val;
-              })},
-              title: const Text("Вегатерианское"),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => {addRecipe()},
-              child: const Text("Добавить"),
-            )
-          ],
-        )
-      )
-    );
+        body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _titleController,
+                    decoration: TextFieldDecoration("Название"),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: TextFieldDecoration("Описание"),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _instructionsController,
+                    decoration: TextFieldDecoration("Рецепт"),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _timeController,
+                    decoration:
+                        TextFieldDecoration("Время приготовления (минут)"),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _calorieController,
+                    decoration: TextFieldDecoration("Калорийность"),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  SwitchListTile(
+                    value: isVegan,
+                    onChanged: (val) => {
+                      setState(() {
+                        isVegan = val;
+                      })
+                    },
+                    title: const Text("Вегатерианское"),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () => {addRecipe()},
+                    child: const Text("Добавить"),
+                  )
+                ],
+              ),
+            )));
   }
 }
-
-
-
-
-

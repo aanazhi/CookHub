@@ -1,12 +1,11 @@
-
-
+import 'package:cook/recipe_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cook/main_page.dart';
 import 'package:cook/service/PocketbaseService.dart';
 
 class RecipesListPage extends StatefulWidget {
   final Future<List<RecipeModel>> recipes;
-  const RecipesListPage ({ Key? key, required this.recipes }): super(key: key);
+  const RecipesListPage({Key? key, required this.recipes}) : super(key: key);
 
   @override
   _RecipesListState createState() => _RecipesListState();
@@ -37,32 +36,37 @@ class _RecipesListState extends State<RecipesListPage> {
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) return child;
                       return const Center(child: CircularProgressIndicator());
                     },
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.error),
                   ),
                   title: Text(
-                  recipe.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold, 
-                    fontSize: 15, 
+                    recipe.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  ' Время приготовления: ${recipe.time.toString()} минут \n'
-                  '\n'
-                  '${recipe.calorie} ккал на 100 грамм'
-                  ,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold, 
-                    fontSize: 13, 
-                    color: Colors.black,
+                  subtitle: Text(
+                    ' Время приготовления: ${recipe.time.toString()} минут \n'
+                    '\n'
+                    '${recipe.calorie} ккал на 100 грамм',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
                   onTap: () {
-                    // Действие при нажатии на элемент списка
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RecipeDetailPage(recipe: recipe),
+                      ),
+                    );
                   },
                 );
               },

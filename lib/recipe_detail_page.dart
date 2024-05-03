@@ -9,6 +9,7 @@ class RecipeDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
@@ -23,19 +24,23 @@ class RecipeDetailPage extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
-                  Text("Время приготовления: ${recipe.time} минут"),
+                  Text(
+                    "Время приготовления: ${recipe.time} минут",
+                    style: TextStyle(fontSize: 17),
+                  ),
                   const SizedBox(height: 10),
-                  Text("Калорийность: ${recipe.calorie} на 100 грамм"),
+                  Text("Калорийность: ${recipe.calorie} на 100 грамм",
+                      style: TextStyle(fontSize: 17)),
                   const SizedBox(height: 10),
                   const Text("Описание:",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(recipe.description),
+                  Text(recipe.description, style: TextStyle(fontSize: 17)),
                   const SizedBox(height: 10),
-                  Text("Инструкции:",
+                  const Text("Инструкции:",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(recipe.instructions),
+                  Text(recipe.instructions, style: TextStyle(fontSize: 17)),
                 ],
               ),
             ),
