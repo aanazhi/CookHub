@@ -12,7 +12,19 @@ class RecipesListPage extends StatefulWidget {
 }
 
 class _RecipesListState extends State<RecipesListPage> {
+  
   final pb = PocketBaseService.pb;
+  Set<int> favoriteIndices = {};
+  Future<void> addFav(String recipeId) async {
+    try {
+      await pb.collection("favorites").create(body: {
+        "user_id": pb.authStore.model.id,
+        "recipe_id": recipeId,
+      });
+    } catch (err) {
+      print(err);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +43,22 @@ class _RecipesListState extends State<RecipesListPage> {
               itemBuilder: (context, index) {
                 final recipe = snapshot.data![index];
                 return ListTile(
-                  leading: Image.network(
-                    recipe.photo,
+                  leading: SizedBox(
                     width: 100,
                     height: 100,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error),
+                    child: Image.network(
+                      recipe.photo,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.error),
+                    ),
                   ),
                   title: Text(
                     recipe.title,
@@ -60,6 +76,29 @@ class _RecipesListState extends State<RecipesListPage> {
                       fontSize: 13,
                       color: Colors.black,
                     ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(
+                      favoriteIndices.contains(index)
+                          ? Icons.star
+                          : Icons.star_border,
+                      color: favoriteIndices.contains(index)
+                          ? Colors.yellow
+                          : Colors.grey,
+                      size: 30.0,
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        if (favoriteIndices.contains(index)) {
+                          favoriteIndices.remove(index);
+                        } else {
+                          favoriteIndices.add(index);
+                        }
+                      });
+                      if (favoriteIndices.contains(index)) {
+                        await addFav(recipe.id);
+                      } else {}
+                    },
                   ),
                   onTap: () {
                     Navigator.of(context).push(

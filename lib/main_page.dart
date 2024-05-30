@@ -6,8 +6,8 @@ import 'service/PocketbaseService.dart';
 import 'package:cook/settings_screen.dart';
 import 'package:flutter/material.dart';
 
-
 class RecipeModel {
+  final String id;
   final String title;
   final String description;
   final String instructions;
@@ -16,7 +16,8 @@ class RecipeModel {
   final String calorie;
 
   RecipeModel(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.description,
       required this.instructions,
       required this.photo,
@@ -25,28 +26,27 @@ class RecipeModel {
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
     return RecipeModel(
+      id: json['id'],
       title: json['title'],
       description: json['description'],
       instructions: json['instructions'],
       photo: json['photo'],
       time: json['time'],
       calorie: json['calorie'],
-
     );
   }
 }
 
 Future<List<RecipeModel>> getRecipes() async {
   final records = await PocketBaseService.pb.collection('recipes').getFullList(
-    sort: '-created',
-  );
+        sort: '-created',
+      );
   List<RecipeModel> recipes = [];
-  for(int i = 0; i < records.length; ++i) {
-      recipes.add(RecipeModel.fromJson(records[i].toJson()));
+  for (int i = 0; i < records.length; ++i) {
+    recipes.add(RecipeModel.fromJson(records[i].toJson()));
   }
   return recipes;
 }
-  
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -56,6 +56,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  int recipeCount = 0;
   final _searchPage = SearchPage();
   final _recipesListPage = RecipesListPage(recipes: getRecipes());
   final _addRecipePage = AddRecipePage();
@@ -68,8 +69,26 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  static const colorNew = Color.fromARGB(255, 148, 205, 120);
+  @override
+  void initState() {
+    super.initState();
+    fetchRecipeCount();
+  }
 
+  Future<void> fetchRecipeCount() async {
+    try {
+      final result = await pb.collection("favorites").getList(
+            filter: 'user_id ="${pb.authStore.model.id}"',
+          );
+      setState(() {
+        recipeCount = result.totalItems;
+      });
+    } catch (err) {
+      print('Error fetching recipe count: $err');
+    }
+  }
+
+  static const colorNew = Color.fromARGB(255, 148, 205, 120);
 
   Future<String> getName() async {
     print(pb.authStore.model);
@@ -94,7 +113,7 @@ class _MainPageState extends State<MainPage> {
     final about = record.getDataValue<String>('about');
     return about;
   }
-  
+
   Widget _buildMainPage() {
     return SingleChildScrollView(
         child: Center(
@@ -145,19 +164,19 @@ class _MainPageState extends State<MainPage> {
           },
         ),
         const SizedBox(height: 20),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
               children: [
                 Text(
-                  "0",
-                  style: TextStyle(
+                  recipeCount.toString(),
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
+                const Text(
                   "Рецепты",
                   style: TextStyle(
                     fontSize: 14,
@@ -166,10 +185,10 @@ class _MainPageState extends State<MainPage> {
                 ),
               ],
             ),
-            Column(
+            const Column(
               children: [
                 Text(
-                  "0",
+                  "3",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -184,10 +203,10 @@ class _MainPageState extends State<MainPage> {
                 ),
               ],
             ),
-            Column(
+            const Column(
               children: [
                 Text(
-                  "0",
+                  "1",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -283,8 +302,6 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +325,15 @@ class _MainPageState extends State<MainPage> {
       ),
       backgroundColor: Colors.white,
       body: Center(
-        child: _selectedIndex == 0 ? _buildMainPage() : _selectedIndex == 1 ? _searchPage : _selectedIndex == 2 ? _addRecipePage : _selectedIndex ==  4 ?  _recipesListPage : Container(), 
+        child: _selectedIndex == 0
+            ? _buildMainPage()
+            : _selectedIndex == 1
+                ? _searchPage
+                : _selectedIndex == 2
+                    ? _addRecipePage
+                    : _selectedIndex == 4
+                        ? _recipesListPage
+                        : Container(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -341,10 +366,3 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-
-
-
-
-
-
-

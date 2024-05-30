@@ -17,21 +17,24 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
 
   void _navigateToRegistrationPage(BuildContext context) {
     Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => MyHomePage()),
+      context,
+      MaterialPageRoute(builder: (context) => MyHomePage()),
     );
   }
 
   void _navigateToMainPage(BuildContext context) {
     Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => MainPage()),
+      context,
+      MaterialPageRoute(builder: (context) => MainPage()),
     );
   }
 
-
   Future<bool> register(String email, String password) async {
-    final Map<String, String> user = {"email": email, "password": password, "passwordConfirm": password};
+    final Map<String, String> user = {
+      "email": email,
+      "password": password,
+      "passwordConfirm": password
+    };
     try {
       await pb.collection("users").create(body: user);
       await pb.collection("users").authWithPassword(email, password);
@@ -57,7 +60,7 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, 
+                  color: Colors.white,
                 ),
               ),
               Padding(
@@ -67,7 +70,7 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'Email',
-                    fillColor: Colors.white, 
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -83,11 +86,24 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Пароль',
-                    fillColor: Colors.white, 
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Пароль должен быть от 8 символов',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
                     ),
                   ),
                 ),
@@ -99,7 +115,7 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Повтор пароля',
-                    fillColor: Colors.white, 
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -110,19 +126,22 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final isOk = await register(_emailController.text, _passwordController.text);
+                  final isOk = await register(
+                      _emailController.text, _passwordController.text);
                   if (isOk) {
                     _navigateToMainPage(context);
-                  } else { print("not registered"); }
+                  } else {
+                    print("not registered");
+                  }
                 },
-                  style: ElevatedButton.styleFrom(
-                     minimumSize: const Size(150, 50), 
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(150, 50),
                 ),
                 child: const Text('Зарегистрироваться',
-                style: TextStyle(
-                  fontSize: 20, 
-                  fontWeight: FontWeight.bold,
-                  color:   Color.fromARGB(255, 148, 205, 120))),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 148, 205, 120))),
               ),
               const SizedBox(height: 15),
               const Text(
@@ -136,7 +155,7 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
               ),
               GestureDetector(
                 onTap: () {
-                _navigateToRegistrationPage(context);
+                  _navigateToRegistrationPage(context);
                 },
                 child: const Text(
                   "Войти",
@@ -146,7 +165,7 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
                     color: Color.fromARGB(221, 255, 255, 255),
                     decoration: TextDecoration.underline,
                     decorationColor: Colors.white,
-                         ),
+                  ),
                 ),
               ),
             ],
@@ -156,10 +175,3 @@ class _YourRegistrationPageState extends State<YourRegistrationPage> {
     );
   }
 }
-
-
-
-
-
-
-

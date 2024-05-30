@@ -14,13 +14,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final pb = PocketBaseService.pb;
 
-  
-
   Future<bool> authenticateUser(String email, String password) async {
     await pb.collection("users").authWithPassword(email, password);
     return pb.authStore.isValid;
   }
-
 
   void _navigateToRegistrationPage(BuildContext context) {
     Navigator.push(
@@ -29,12 +26,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
-    void _navigateToMainPage(BuildContext context) {
+  void _navigateToMainPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => MainPage()),
     );
+  }
+
+  void _showErrorSnackbar(BuildContext context) {
+    const snackBar = SnackBar(
+      content: Text('Неверный логин или пароль. Попробуйте еще раз.'),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -94,14 +99,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     _emailController.text,
                     _passwordController.text,
                   );
+
                   if (isAuthenticated) {
-                  _navigateToMainPage(context);
-                  _navigateToMainPage(context);
-
                     _navigateToMainPage(context);
-
                   } else {
-                    print('Неверный логин или пароль');
+                    _showErrorSnackbar(context);
                   }
                 },
                 child: const Text('Войти',
@@ -142,8 +144,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-
-
-
-

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'enter.dart';
 
-
-
 void main() {
   runApp(const MyApp());
 }
@@ -13,10 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor:  const Color.fromARGB(255, 148, 205, 120),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 148, 205, 120),
       ),
-      home:  MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
