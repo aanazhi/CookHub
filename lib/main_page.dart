@@ -48,6 +48,15 @@ Future<List<RecipeModel>> getRecipes() async {
   return recipes;
 }
 
+Future<List<RecipeModel>> getFavorites(String userId) async {
+  final records = await PocketBaseService.pb.collection("favorites").getFullList(filter: 'user_id = "$userId"', expand: "recipe_id");
+  List<RecipeModel> recipes = [];
+  for (int i = 0; i < records.length; i++) {
+    recipes.add(RecipeModel.fromJson(records[i].toJson()["expand"]["recipe_id"]));
+  }
+  return recipes;
+}
+
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -57,11 +66,12 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int recipeCount = 0;
+  final pb = PocketBaseService.pb;
   final _searchPage = SearchPage();
   final _recipesListPage = RecipesListPage(recipes: getRecipes());
+  final _favoritesListPage = RecipesListPage(recipes: getFavorites(PocketBaseService.pb.authStore.model.id));
   final _addRecipePage = AddRecipePage();
   int _selectedIndex = 0;
-  final pb = PocketBaseService.pb;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -331,7 +341,9 @@ class _MainPageState extends State<MainPage> {
                 ? _searchPage
                 : _selectedIndex == 2
                     ? _addRecipePage
-                    : _selectedIndex == 4
+                    : _selectedIndex == 3
+                      ?_favoritesListPage
+                      : _selectedIndex == 4
                         ? _recipesListPage
                         : Container(),
       ),
